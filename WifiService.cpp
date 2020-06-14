@@ -16,7 +16,6 @@ WifiServiceClass::~WifiServiceClass()
 
 int WifiServiceClass::connect()
 {
-    ECHOLN("[WifiService][connect] Read wifi SSID and PASS from EEPROM");
     return connect(WIFI_SSID, WIFI_PASSWORD);
 }
 

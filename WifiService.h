@@ -5,8 +5,8 @@
 #include <ESP8266WiFi.h>
 #include "AppDebug.h"
 
-#define WIFI_SSID "BE-CA"
-#define WIFI_PASSWORD "12345678"
+#define WIFI_SSID "Tat Thanh"
+#define WIFI_PASSWORD "888888889"
 
 #define CONNECT_OK (1)
 #define CONNECT_TIMEOUT (-1)
