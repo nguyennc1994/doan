@@ -5,6 +5,7 @@
 #include <ESP8266WiFi.h>
 #include <DHT.h>
 #include "AppDebug.h"
+#include "MqttService.h"
 
 #define DHT_PIN D2
 #define DHT_TYPE DHT11

@@ -31,7 +31,7 @@ void MqttServiceClass::reconnect() {
     clientId += String(random(0xffff), HEX);
 
     if (_mqttClient->connect(clientId.c_str())) {
-        ECHOLN("connected");
+        ECHOLN("[MqttServiceClass][reconnect] MQTT Connected");
 
         _mqttClient->subscribe(MQTT_PUMP_TOPIC);
         _mqttClient->subscribe(MQTT_LAMP_TOPIC);
@@ -45,6 +45,7 @@ void MqttServiceClass::reconnect() {
 void MqttServiceClass::addMessage(MqttMessage * message)
 {
     if (_publishMessageCount < MAX_PUBLISH_LENGTH) {
+        ECHO("[MqttServiceClass][addMessage]");
         _messageQueue->push(&message);
         _publishMessageCount = _publishMessageCount + 1;
         return;
@@ -66,10 +67,12 @@ void MqttServiceClass::publish()
 
 void MqttServiceClass::loop()
 {
+
     if (!_mqttClient->connected()) {
         reconnect();
         return;
     }
+    _mqttClient->loop();
 
     publish();
 }
