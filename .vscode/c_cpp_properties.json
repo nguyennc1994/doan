@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/hoanghoi/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/tools/**",
+                "/home/hoanghoi/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/cores/**",
+                "/home/hoanghoi/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/libraries/**",
+                "/home/hoanghoi/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/variants/nodemcu/**",
+                "/home/hoanghoi/Arduino/libraries/**",
+                "${workspaceFolder}/**",
+                "/home/hoanghoi/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/**",
+                "/home/hoanghoi/.arduino15/packages/esp8266/tools/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "clang-x64",
+            "forcedInclude": []
+        }
+    ],
+    "version": 4
+}
