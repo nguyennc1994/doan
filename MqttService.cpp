@@ -21,11 +21,11 @@ MqttServiceClass::~MqttServiceClass()
 void MqttServiceClass::setup()
 {
     _mqttClient->setServer(MQTT_HOST, MQTT_PORT);
-    _mqttClient->setCallback(callback);
+    _mqttClient->setCallback(MCallback);
 }
 
 void MqttServiceClass::reconnect() {
-    ECHO("Attempting MQTT connection...");
+    ECHOLN("Attempting MQTT connection...");
 
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
@@ -44,9 +44,13 @@ void MqttServiceClass::reconnect() {
 
 void MqttServiceClass::addMessage(MqttMessage * message)
 {
+    FREE_HEAP();
     if (_publishMessageCount < MAX_PUBLISH_LENGTH) {
-        ECHO("[MqttServiceClass][addMessage]");
-        _messageQueue->push(&message);
+        ECHO("[MqttServiceClass][addMessage]:");
+        ECHO(message->topic);
+        ECHO(" - ");
+        ECHOLN(message->data);
+        _messageQueue->push(message);
         _publishMessageCount = _publishMessageCount + 1;
         return;
     }
@@ -60,8 +64,12 @@ void MqttServiceClass::publish()
         MqttMessage message;
 		_messageQueue->pop(&message);
         _publishMessageCount = _publishMessageCount - 1;
+        ECHO("[MqttServiceClass][publish]:");
+        ECHO(message.topic);
+        ECHO(" - ");
+        ECHOLN(message.data);
 
-        _mqttClient->publish(message.topic.c_str(), message.data.c_str());
+        _mqttClient->publish(message.topic, message.data);
     }
 }
 
@@ -79,7 +87,7 @@ void MqttServiceClass::loop()
 
 MqttServiceClass MqttService;
 
-void callback(char *topic, unsigned char *payload, unsigned int length)
+void MCallback(char *topic, unsigned char *payload, unsigned int length)
 {
     ECHO("[MqttServiceClass][callback] Message arrived: [");
     ECHO(topic);

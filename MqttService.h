@@ -7,21 +7,21 @@
 #include "AppDebug.h"
 #include "cppQueue.h"
 
-#define MQTT_HOST "192.168.1.13"
+// #define MQTT_HOST "192.168.1.13"
+#define MQTT_HOST "192.168.3.101"
 #define MQTT_PORT (1883)
 #define MQTT_AIR_TOPIC "air_topic"
 #define MQTT_GROUND_TOPIC "ground_topic"
 #define MQTT_PUMP_TOPIC "pump_topic"
 #define MQTT_LAMP_TOPIC "lamp_topic"
-#define MAX_PUBLISH_LENGTH (10)
+#define MAX_PUBLISH_LENGTH (5)
 #define	IMPLEMENTATION	FIFO
-
 typedef struct structMqttMessage {
-	String	topic;
-	String	data;
+	char topic[15];
+	char data[50];
 } MqttMessage;
 
-extern void callback(char *topic, unsigned char *payload, unsigned int length);
+extern void MCallback(char *topic, unsigned char *payload, unsigned int length);
 
 class MqttServiceClass
 {

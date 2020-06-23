@@ -14,11 +14,9 @@ void setup() {
 }
 
 void loop() {
-    AirService.loop();
-    MqttService.loop();
-
     if (WiFi.status() == WL_CONNECTED) {
-
+        AirService.loop();
+        MqttService.loop();
         return;
     }
     WifiService.connect();

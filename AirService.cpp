@@ -34,14 +34,19 @@ void AirServiceClass::measure()
     _humidity = dht->readHumidity();
     _temperature = dht->readTemperature();
     _recent_time = millis();
-    MqttMessage message = {MQTT_AIR_TOPIC, String(_humidity) + " " + String(_temperature) + " " + String(_recent_time)};
-    MqttService.addMessage(&message);
+    String data = "{\"h\":" + String(80) + ",\"t\":" + String(31) + "}";
+    String topic = MQTT_AIR_TOPIC;
+
+    MqttMessage message;
+    topic.toCharArray(message.topic, 15);
+    data.toCharArray(message.data, 50);
     ECHO("[AirServiceClass][measure] Humidity: ");
     ECHO(_humidity);
     ECHO(", emperature: ");
     ECHO(_temperature);
     ECHO(", recent_time: ");
     ECHOLN(_recent_time);
+    MqttService.addMessage(&message);
 }
 
 void AirServiceClass::setup()
