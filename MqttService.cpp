@@ -1,9 +1,5 @@
 #include "MqttService.h"
 
-// void callback() {
-
-// }
-
 /**
  * constructor
  */
@@ -45,17 +41,19 @@ void MqttServiceClass::reconnect() {
 void MqttServiceClass::addMessage(MqttMessage * message)
 {
     FREE_HEAP();
-    if (_publishMessageCount < MAX_PUBLISH_LENGTH) {
-        ECHO("[MqttServiceClass][addMessage]:");
-        ECHO(message->topic);
-        ECHO(" - ");
-        ECHOLN(message->data);
-        _messageQueue->push(message);
-        _publishMessageCount = _publishMessageCount + 1;
-        return;
+    if (_publishMessageCount >= MQTT_MESSAGE_QUEUE_LENGTH) {
+        ECHOLN("[MqttServiceClass][addMessage] MESSAGE QUEUE IS FULL");
+        MqttMessage expMessage;
+		_messageQueue->pop(&expMessage);
+        _publishMessageCount = _publishMessageCount - 1;
     }
 
-    ECHOLN("[MqttServiceClass][addMessage] MAX_PUBLISH_LENGTH");
+    ECHO("[MqttServiceClass][addMessage]:");
+    ECHO(message->topic);
+    ECHO(" - ");
+    ECHOLN(message->data);
+    _messageQueue->push(message);
+    _publishMessageCount = _publishMessageCount + 1;
 }
 
 void MqttServiceClass::publish()
@@ -89,11 +87,35 @@ MqttServiceClass MqttService;
 
 void MCallback(char *topic, unsigned char *payload, unsigned int length)
 {
+    String data;
     ECHO("[MqttServiceClass][callback] Message arrived: [");
     ECHO(topic);
     ECHO("] ");
+    if (MQTT_DATA_LENGTH < length) {
+        ECHOLN("MAX MQTT_DATA_LENGTH");
+        return;
+    }
+
     for (int i = 0; i < length; i++) {
-        ECHO((char) payload[i]);
+        data += (char) payload[i];
+    }
+    ECHOLN(data);
+
+    const size_t capacity = JSON_OBJECT_SIZE(1) + 18;
+    DynamicJsonDocument doc(capacity);
+    deserializeJson(doc, data.c_str());
+    unsigned long t = doc["t"];
+
+    if (strcmp(topic, MQTT_PUMP_TOPIC) == 0) {
+        ECHOLN("MQTT_PUMP_TOPIC");
+        PumpService.incrementTimeOn(t * 1000);
+        return;
+    }
+
+    if (strcmp(topic, MQTT_LAMP_TOPIC) == 0) {
+        ECHOLN("MQTT_LAMP_TOPIC");
+        LampService.incrementTimeOn(t * 1000);
+        return;
     }
 
     ECHOLN("");

@@ -9,7 +9,7 @@
 
 #define DHT_PIN D2
 #define DHT_TYPE DHT11
-#define MEASURE_INTERVAL (30000)
+#define AIR_MEASURE_INTERVAL (30000)
 
 class AirServiceClass
 {
